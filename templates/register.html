@@ -44,14 +44,14 @@
         </p>
         <p>
             <div style="justify-content: space-between; display: flex; display: flex; padding: 0 150px 30px 150px;"> 
-            {% for subfield in form.type %}
+            {% for subfield in form.tip %}
                 <div>
                 {{ subfield }}
                 {{ subfield.label }}
                 </div>
             {% endfor %}
             </div>
-            {% for error in form.type.errors %}
+            {% for error in form.tip.errors %}
                 <p class="alert alert-danger" role="alert">
                     {{ error }}
                 </p>

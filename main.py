@@ -1,5 +1,5 @@
 import os
-from flask import Flask, render_template, redirect, make_response, jsonify, abort
+from flask import Flask, render_template, redirect, make_response, jsonify, request, abort
 from flask_avatars import Avatars
 from flask_login import LoginManager, login_required, logout_user, login_user
 from flask_restful import Api
@@ -109,7 +109,7 @@ def reqister():
             return render_template('register.html', title='Регистрация',
                                    form=form,
                                    message="Такой пользователь уже есть!")
-        if form.type.data == 'Студент':
+        if form.tip.data == 'СТУДЕНТ':
             user = Student(username=form.username.data.strip(), email=form.email.data.strip())
             user.set_password(form.password.data.strip())
             db_sess.add(user)
@@ -125,10 +125,22 @@ def reqister():
 
 
 @app.route('/student_register/<username>', methods=['GET', 'POST'])
-def student_register():
+def student_register(username):
     form = StudentRegisterForm()
-    if form.validate_on_submit():
-        return render_template('student_register.html', title='Регистрация', form=form)
+    db_sess = db_session.create_session()
+    student = db_sess.query(Student).filter(Student.username == username).first()
+    if student:
+        if form.validate_on_submit():
+            student.name = form.name.data.strip()
+            student.surname = form.surname.data.strip()
+            student.birthday = form.birthday.data
+            student.study_place = form.study_place.data.strip()
+            student.program = form.program.data.strip()
+            student.grade = form.grade.data
+            student.course = form.course.data
+            return redirect('/login')
+    else:
+        abort(404)
     return render_template('student_register.html', title='Регистрация', form=form)
 
 

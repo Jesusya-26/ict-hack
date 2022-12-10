@@ -25,26 +25,49 @@
     </p>
     <p>
         {{ form.birthday.label }}<br>
-        {{ form.birthday(class="form-control"), type="date"}}<br>
+        {{ form.birthday(class="form-control", type="date")}}<br>
         {% for error in form.birthday.errors %}
             <p class="alert alert-danger" role="alert">
                 {{ error }}
             </p>
         {% endfor %}
     </p>
-    <p>Образование: </p>
     <p>
-        {% for education in form.education %}
-            {{ education.label }}<br>
-            {{ education(class="form-control") }}<br>
-            {% for error in education.errors %}
-                <p class="alert alert-danger" role="alert">
-                    {{ error }}
-                </p>
-            {% endfor %}
+        {{ form.study_place.label }}<br>
+        {{ form.study_place(class="form-control") }}<br>
+        {% for error in form.study_place.errors %}
+            <p class="alert alert-danger" role="alert">
+                {{ error }}
+            </p>
         {% endfor %}
     </p>
-    <a href="/student_register" class="btn btn-success">Добавить</a></p>
+    <p>
+        {{ form.program.label }}<br>
+        {{ form.program(class="form-control") }}<br>
+        {% for error in form.program.errors %}
+            <p class="alert alert-danger" role="alert">
+                {{ error }}
+            </p>
+        {% endfor %}
+    </p>
+    <p>
+        {{ form.grade.label }}<br>
+        {{ form.grade(class="form-control") }}<br>
+        {% for error in form.grade.errors %}
+            <p class="alert alert-danger" role="alert">
+                {{ error }}
+            </p>
+        {% endfor %}
+    </p>
+    <p>
+        {{ form.course.label }}<br>
+        {{ form.course(class="form-control") }}<br>
+        {% for error in form.course.errors %}
+            <p class="alert alert-danger" role="alert">
+                {{ error }}
+            </p>
+        {% endfor %}
+    </p>
     <p>{{ form.submit(type="submit", class="btn btn-primary") }}
         <a href="/login" class="btn btn-success">Войти</a></p>
     {{message}}
