@@ -3,9 +3,6 @@
 {% block content %}
 <center>
     <h1>Студенты</h1>
-    <a href="/student_register" class="btn btn-success">
-        Оставить заявку
-    </a>
     {% for item in items %}
     <div class="card" style="margin-top:10px;width: 50rem;">
         {% if item.photo_path %}

@@ -8,7 +8,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 
 class Company(SqlAlchemyBase, UserMixin, SerializerMixin):
-    """Модель пользователя"""
+    """Модель компании"""
     __tablename__ = 'companies'
 
     id = sqlalchemy.Column(sqlalchemy.Integer,

@@ -8,7 +8,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 
 class Student(SqlAlchemyBase, UserMixin, SerializerMixin):
-    """Модель пользователя"""
+    """Модель студента"""
     __tablename__ = 'students'
 
     id = sqlalchemy.Column(sqlalchemy.Integer,
@@ -18,11 +18,9 @@ class Student(SqlAlchemyBase, UserMixin, SerializerMixin):
     surname = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     age = sqlalchemy.Column(sqlalchemy.Integer, nullable=True)
     about = sqlalchemy.Column(sqlalchemy.String, nullable=True)
-    email = sqlalchemy.Column(sqlalchemy.String,
-                              index=True, unique=True)
+    email = sqlalchemy.Column(sqlalchemy.String, index=True, unique=True)
     hashed_password = sqlalchemy.Column(sqlalchemy.String, nullable=True)
-    created_date = sqlalchemy.Column(sqlalchemy.DateTime,
-                                     default=datetime.datetime.now)
+    created_date = sqlalchemy.Column(sqlalchemy.DateTime, default=datetime.datetime.now)
     projects = orm.relation("StudentProject", back_populates='student')
 
     def set_password(self, password):

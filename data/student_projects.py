@@ -6,7 +6,7 @@ from data.db_session import SqlAlchemyBase
 
 
 class StudentProject(SqlAlchemyBase, SerializerMixin):
-    """Модель записи пользователя"""
+    """Модель проекта компании"""
     __tablename__ = 'student_projects'
 
     id = sqlalchemy.Column(sqlalchemy.Integer,

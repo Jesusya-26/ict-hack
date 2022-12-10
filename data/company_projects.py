@@ -6,7 +6,7 @@ from data.db_session import SqlAlchemyBase
 
 
 class CompanyProject(SqlAlchemyBase, SerializerMixin):
-    """Модель записи пользователя"""
+    """Модель проекта компании"""
     __tablename__ = 'company_projects'
 
     id = sqlalchemy.Column(sqlalchemy.Integer,

@@ -8,10 +8,7 @@ from data.students import Student
 from data.student_projects import StudentProject
 from data.companies import Company
 from data.company_projects import CompanyProject
-from forms.student_project import StudentProjectForm
-from forms.student import RegisterForm, LoginForm, EditUserForm
-from forms.company_project import CompanyProjectForm
-from forms.company import CompanyRegisterForm, CompanyLoginForm, EditCompanyForm
+from forms.users import RegisterFormStep1, LoginForm
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'ict_hackaton'
@@ -97,7 +94,7 @@ def company_profile(username):
 @app.route('/register', methods=['GET', 'POST'])
 def reqister():
     """Страница с формой регистрации"""
-    form = CompanyRegisterForm()
+    form = RegisterFormStep1()
     if form.validate_on_submit():
         if form.password.data != form.password_again.data.strip():
             return render_template('register.html', title='Регистрация',
@@ -108,18 +105,10 @@ def reqister():
             return render_template('register.html', title='Регистрация',
                                    form=form,
                                    message="Такой пользователь уже есть!")
-        if db_sess.query(Student).filter(Student.username == form.username.data.strip()).first():
-            return render_template('register.html', title='Регистрация',
-                                   form=form,
-                                   message="Логин занят!")
-        user = Student(
-            username=form.username.data.strip(),
-            name=form.name.data.strip(),
-            surname=form.surname.data.strip(),
-            email=form.email.data.strip(),
-            age=form.age.data,
-            about=form.about.data.strip()
-        )
+        if form.type.data == 'Студент':
+            user = Student(email=form.email.data.strip())
+        else:
+            user = Company(email=form.email.data.strip())
         user.set_password(form.password.data.strip())
         db_sess.add(user)
         db_sess.commit()
@@ -130,14 +119,12 @@ def reqister():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     """Страница с формой авторизации пользователя"""
-    form = CompanyLoginForm()
+    form = LoginForm()
     if form.validate_on_submit():
         db_sess = db_session.create_session()
-        user = db_sess.query(Student).filter(
-            (Student.email == form.login.data.strip()) | (Student.username == form.login.data.strip())).first()
+        user = db_sess.query(Student).filter((Student.email == form.email.data.strip())).first()
         if not user:
-            user = db_sess.query(Company).filter(
-                (Company.email == form.login.data.strip()) | (Company.username == form.login.data.strip())).first()
+            user = db_sess.query(Company).filter((Company.email == form.email.data.strip())).first()
         if user and user.check_password(form.password.data.strip()):
             login_user(user, remember=form.remember_me.data)
             return redirect("/")
