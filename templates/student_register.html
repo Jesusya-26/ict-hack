@@ -68,6 +68,18 @@
             </p>
         {% endfor %}
     </p>
+    <p>
+        {{ form.photo.label }}<br>
+        {{ form.photo(class="form-control") }}<br>
+        {% for error in form.photo.errors %}
+            <p content="alert alert-danger" role="alert">
+                {{ error }}
+            </p>
+        {% endfor %}
+    </p>
+    {% if photo %}
+    <img src="{{photo}}" class="card-img-top" alt="...">
+    {% endif %}
     <p>{{ form.submit(type="submit", class="btn btn-primary") }}
         <a href="/login" class="btn btn-success">Войти</a></p>
     {{message}}

@@ -1,7 +1,8 @@
 from flask_wtf import FlaskForm
+from flask_wtf.file import FileAllowed, FileField
 from wtforms import EmailField, PasswordField, SubmitField, RadioField, DateField
 from wtforms import BooleanField, StringField, IntegerField, SelectField
-from wtforms.validators import DataRequired, EqualTo, Length, ValidationError
+from wtforms.validators import DataRequired, EqualTo, Length, ValidationError, NumberRange
 
 
 class RegisterForm(FlaskForm):
@@ -27,7 +28,7 @@ class StudentRegisterForm(FlaskForm):
     """Форма для 2 шага регистрации (студент)"""
     name = StringField('Имя', validators=[DataRequired(), Length(min=2, message='Слишком короткое имя!')])
     surname = StringField('Фамилия', validators=[DataRequired(), Length(min=2, message='Слишком короткая фамилия!')])
-    birthday = DateField(format='%d.%m.%Y')
+    birthday = DateField(validators=[DataRequired()])
     study_place = StringField('Учебное заведение',
                               validators=[DataRequired(),
                                           Length(min=2, message='Такого учебного заведения не существует!!')])
@@ -36,13 +37,15 @@ class StudentRegisterForm(FlaskForm):
     grade = SelectField('Степень обучения: ',
                         choices=[(x, x) for x in ['Бакалавр', 'Магистр', 'Специалист', 'Аспирант', 'Выпускник']],
                         default='Бакалавр')
-    course = IntegerField('Курс', validators=[DataRequired()], default=1)
+    course = IntegerField('Курс', validators=[DataRequired('Если вы не бакалавр и не магистр, укажите 1.'),
+                                              NumberRange(min=1, max=6, message='Укажите число от 1 до 6!')], default=1)
+    photo = FileField('Изображение', validators=[FileAllowed(['png', 'jpg', 'jpeg'], 'Только png и jpg!')])
     submit = SubmitField('ДАЛЕЕ')
 
 
 class LoginForm(FlaskForm):
     """Форма для авторизации"""
-    email = EmailField('Логин/Почта', validators=[DataRequired()])
+    email = EmailField('Почта', validators=[DataRequired()])
     password = PasswordField('Пароль', validators=[DataRequired()])
     remember_me = BooleanField('Запомнить меня')
     submit = SubmitField('ВОЙТИ')

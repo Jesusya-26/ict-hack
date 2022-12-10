@@ -23,6 +23,7 @@ class Student(SqlAlchemyBase, UserMixin, SerializerMixin):
     program = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     grade = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     course = sqlalchemy.Column(sqlalchemy.Integer, nullable=True)
+    photo_path = sqlalchemy.Column(sqlalchemy.String, default='')
     created_date = sqlalchemy.Column(sqlalchemy.DateTime, default=datetime.datetime.now)
     projects = orm.relation("StudentProject", back_populates='student')
 

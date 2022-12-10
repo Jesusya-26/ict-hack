@@ -1,5 +1,5 @@
 import os
-from flask import Flask, render_template, redirect, make_response, jsonify, request, abort
+from flask import Flask, render_template, redirect, make_response, jsonify, request, abort, url_for
 from flask_avatars import Avatars
 from flask_login import LoginManager, login_required, logout_user, login_user
 from flask_restful import Api
@@ -9,9 +9,14 @@ from data.student_projects import StudentProject
 from data.companies import Company
 from data.company_projects import CompanyProject
 from forms.users import RegisterForm, LoginForm, StudentRegisterForm
+from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'ict_hackaton'
+app.config['STUDENT_PHOTO_FOLDER'] = 'img/student_photos/'
+app.config['COMPANY_PHOTO_FOLDER'] = 'img/company_photos/'
+app.config['STUDENT_PROJECT_PHOTO_FOLDER'] = 'img/student_project_photos/'
+app.config['COMPANY_PROJECT_PHOTO_FOLDER'] = 'img/company_project_photos/'
 login_manager = LoginManager()
 login_manager.init_app(app)
 api = Api(app)
@@ -138,6 +143,15 @@ def student_register(username):
             student.program = form.program.data.strip()
             student.grade = form.grade.data
             student.course = form.course.data
+            file = form.photo.data
+            if file:
+                filename = secure_filename(file.filename)
+                os.chdir('static/' + app.config['STUDENT_PHOTO_FOLDER'])
+                if not os.path.isdir(student.username):
+                    os.mkdir(student.username)
+                student.photo_path = url_for(
+                    'static', filename=app.config['STUDENT_PHOTO_FOLDER'] + f'{student.username}/{filename}')
+                file.save(f'{student.username}/{filename}')
             return redirect('/login')
     else:
         abort(404)
