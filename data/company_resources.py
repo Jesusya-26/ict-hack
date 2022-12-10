@@ -1,18 +1,18 @@
 from flask import jsonify, request
 from flask_restful import abort, Resource
 from data import db_session
-from data.users import User
+from data.students import Student
 from data.parsers import user_parser
 
 
-class UsersResource(Resource):
+class CompanyResource(Resource):
     """Ресурс пользователя (restful-api)"""
 
     def get(self, user_id):
         """Получение пользователя"""
         abort_if_user_not_found(user_id)
         session = db_session.create_session()
-        user = session.query(User).get(user_id)
+        user = session.query(Student).get(user_id)
         return jsonify(
             {
                 'user':
@@ -27,7 +27,7 @@ class UsersResource(Resource):
         abort_if_user_not_found(user_id)
         args = user_parser.parse_args()
         session = db_session.create_session()
-        user = session.query(User).get(user_id)
+        user = session.query(Student).get(user_id)
         user.username = args['username']
         user.surname = args['surname']
         user.name = args['name']
@@ -42,19 +42,19 @@ class UsersResource(Resource):
         """Удаление пользователя"""
         abort_if_user_not_found(user_id)
         session = db_session.create_session()
-        user = session.query(User).get(user_id)
+        user = session.query(Student).get(user_id)
         session.delete(user)
         session.commit()
         return jsonify({'success': 'OK'})
 
 
-class UsersListResource(Resource):
+class CompanyListResource(Resource):
     """Ресурс списка пользователей (restful-api)"""
 
     def get(self):
         """Получение всех пользователей"""
         session = db_session.create_session()
-        users = session.query(User).all()
+        users = session.query(Student).all()
         return jsonify(
             {
                 'users':
@@ -69,7 +69,7 @@ class UsersListResource(Resource):
         """Создание пользователя"""
         args = user_parser.parse_args()
         session = db_session.create_session()
-        user = User(
+        user = Student(
             username=args['username'],
             surname=args['surname'],
             name=args['name'],
@@ -86,6 +86,6 @@ class UsersListResource(Resource):
 def abort_if_user_not_found(user_id):
     """Обработка ситуации, когда пользователя с указанным id не существует"""
     session = db_session.create_session()
-    user = session.query(User).get(user_id)
+    user = session.query(Student).get(user_id)
     if not user:
-        abort(404, message=f"User {user_id} not found")
+        abort(404, message=f"Student {user_id} not found")
