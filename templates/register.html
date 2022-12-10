@@ -2,10 +2,19 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div style="padding: 160px 64px 160px 64px; justify-content: center;">
+<div style="padding: 50px 64px 50px 64px; justify-content: center;">
     <div style="text-align: center;"><h1>Регистрация</h1></div>
     <form action="" method="POST" enctype="multipart/form-data">
         {{ form.hidden_tag() }}
+        <p>
+            {{ form.username.label }}<br>
+            {{ form.username(class="form-control") }}<br>
+            {% for error in form.username.errors %}
+                <p class="alert alert-danger" role="alert">
+                    {{ error }}
+                </p>
+            {% endfor %}
+        </p>
         <p>
             {{ form.email.label }}<br>
             {{ form.email(class="form-control", type="email") }}<br>

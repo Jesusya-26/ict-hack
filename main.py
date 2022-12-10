@@ -8,7 +8,7 @@ from data.students import Student
 from data.student_projects import StudentProject
 from data.companies import Company
 from data.company_projects import CompanyProject
-from forms.users import RegisterFormStep1, LoginForm
+from forms.users import RegisterForm, LoginForm, StudentRegisterForm
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'ict_hackaton'
@@ -94,7 +94,7 @@ def company_profile(username):
 @app.route('/register', methods=['GET', 'POST'])
 def reqister():
     """Страница с формой регистрации"""
-    form = RegisterFormStep1()
+    form = RegisterForm()
     if form.validate_on_submit():
         if form.password.data != form.password_again.data.strip():
             return render_template('register.html', title='Регистрация',
@@ -105,15 +105,31 @@ def reqister():
             return render_template('register.html', title='Регистрация',
                                    form=form,
                                    message="Такой пользователь уже есть!")
+        if db_sess.query(Student).filter(Student.username == form.username.data.strip()).first():
+            return render_template('register.html', title='Регистрация',
+                                   form=form,
+                                   message="Такой пользователь уже есть!")
         if form.type.data == 'Студент':
-            user = Student(email=form.email.data.strip())
+            user = Student(username=form.username.data.strip(), email=form.email.data.strip())
+            user.set_password(form.password.data.strip())
+            db_sess.add(user)
+            db_sess.commit()
+            return redirect(f'/student_register/{user.username}')
         else:
-            user = Company(email=form.email.data.strip())
-        user.set_password(form.password.data.strip())
-        db_sess.add(user)
-        db_sess.commit()
-        return redirect('/login')
+            user = Company(username=form.username.data.strip(), email=form.email.data.strip())
+            user.set_password(form.password.data.strip())
+            db_sess.add(user)
+            db_sess.commit()
+            return redirect(f'/company_register/{user.username}')
     return render_template('register.html', title='Регистрация', form=form)
+
+
+@app.route('/student_register/<username>', methods=['GET', 'POST'])
+def student_register():
+    form = StudentRegisterForm()
+    if form.validate_on_submit():
+        return render_template('student_register.html', title='Регистрация', form=form)
+    return render_template('student_register.html', title='Регистрация', form=form)
 
 
 @app.route('/login', methods=['GET', 'POST'])
