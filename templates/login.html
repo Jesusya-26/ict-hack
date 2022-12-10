@@ -1,8 +1,10 @@
 <!-- Шаблон для страницы авторизации пользователя -->
+
 {% extends "base.html" %}
 
 {% block content %}
-    <h1>Авторизация</h1>
+    <div style="padding: 160px 64px 160px 64px; justify-content: center;">
+    <div style="text-align: center;"><h1>Авторизация</h1></div>
     <form action="" method="post">
         {{ form.hidden_tag() }}
         <p>
@@ -23,9 +25,29 @@
                 </div>
             {% endfor %}
         </p>
-        <p>{{ form.remember_me() }} {{ form.remember_me.label }}</p>
-        <p>{{ form.submit(type="submit", class="btn btn-success") }}
-        <a href="/register" class="btn btn-primary">Зарегистрироваться</a></p>
+        <p style="justify-content: center; text-align: center;">
+            {{ form.submit(type="submit", class="btn btn-success", style="background: #52A874;
+            border-color: #52A874;
+            text-align: center;
+            font-weight: 600;
+            letter-spacing: 0.05rem;
+            padding: 10px 30px 10px 30px;
+            line-height: 1.2;") }}
+        </p>
+        <p style="justify-content: center; text-align: center;">
+            или
+        </p>
+        <p style="justify-content: center; text-align: center;">
+            <a href="/register", class="btn btn-primary", style="background: #221183;
+            border-color: #221183;
+            text-align: center;
+            font-weight: 600;
+            letter-spacing: 0.05rem;
+            padding: 10px 30px 10px 30px;
+            line-height: 1.2;">ЗАРЕГИСТРИРОВАТЬСЯ</a>
+        </p>
         <div>{{ message }}</div>
     </form>
+    </div>
+
 {% endblock %}
