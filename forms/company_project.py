@@ -5,7 +5,7 @@ from wtforms import BooleanField, SubmitField
 from wtforms.validators import DataRequired
 
 
-class NewsForm(FlaskForm):
+class CompanyProjectForm(FlaskForm):
     """Форма для создания/изменения записи"""
     title = StringField('Заголовок', validators=[DataRequired()])
     content = TextAreaField("Содержание")

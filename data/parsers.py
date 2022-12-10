@@ -14,7 +14,7 @@ student_projects_parser = reqparse.RequestParser()  # парсер аргуме�
 student_projects_parser.add_argument('title', required=True)
 student_projects_parser.add_argument('content', required=True)
 student_projects_parser.add_argument('is_private', required=True, type=bool)
-student_projects_parser.add_argument('user_id', required=True, type=int)
+student_projects_parser.add_argument('company_id', required=True, type=int)
 
 company_parser = reqparse.RequestParser()  # парсер аргументов для ресурсов пользователя
 company_parser.add_argument('username', required=True)
@@ -30,4 +30,4 @@ company_projects_parser = reqparse.RequestParser()  # парсер аргуме�
 company_projects_parser.add_argument('title', required=True)
 company_projects_parser.add_argument('content', required=True)
 student_projects_parser.add_argument('is_private', required=True, type=bool)
-company_projects_parser.add_argument('user_id', required=True, type=int)
+company_projects_parser.add_argument('company_id', required=True, type=int)

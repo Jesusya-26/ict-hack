@@ -23,7 +23,7 @@ class Company(SqlAlchemyBase, UserMixin, SerializerMixin):
     hashed_password = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     created_date = sqlalchemy.Column(sqlalchemy.DateTime,
                                      default=datetime.datetime.now)
-    news = orm.relation("CompanyProject", back_populates='company')
+    projects = orm.relation("CompanyProject", back_populates='company')
 
     def set_password(self, password):
         """Хэширование пароля"""

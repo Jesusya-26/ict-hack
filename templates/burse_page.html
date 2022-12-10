@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block content %}
+<center><h1>Биржа</h1></center>
+{% for item in items %}
+<center>
+    <div class="card" style="margin-top:10px;width: 50rem;">
+        {% if item.photo_path %}
+        <img src="{{item.photo_path}}" class="card-img-top" alt="...">
+        {% endif %}
+        <center>
+            <div class="card-body">
+                <h5 class="card-title">{{item.title}} <img src="{{ avatars.robohash(item.user.username, size=28) }}"
+                                                           class="rounded-circle border border-dark" alt="..."></h5>
+                <p class="card-text">{{item.content}}</p>
+                {% if current_user.is_authenticated and current_user == item.user %}
+                <div>
+                    <a href="/edit_project/{{ item.id }}" class="btn btn-warning">
+                        Изменить
+                    </a>
+                    <a href="/delete_project/{{ item.id }}" class="btn btn-danger">
+                        Удалить
+                    </a>
+                </div>
+                {% endif %}
+                <div style="margin-top:10px">
+                    Автор – <a href="/user/{{item.user.username}}">{{item.user.name}} {{item.user.surname}}</a>,
+                    Дата создания –
+                    {{item.created_date.strftime('%d.%m.%Y, %H:%M')}}
+                </div>
+
+            </div>
+        </center>
+    </div>
+</center>
+{% endfor %}
+{% endblock %}

@@ -7,7 +7,7 @@ from data.db_session import SqlAlchemyBase
 
 class CompanyProject(SqlAlchemyBase, SerializerMixin):
     """Модель записи пользователя"""
-    __tablename__ = 'projects'  # название таблицы
+    __tablename__ = 'company_projects'
 
     id = sqlalchemy.Column(sqlalchemy.Integer,
                            primary_key=True, autoincrement=True)
@@ -17,8 +17,8 @@ class CompanyProject(SqlAlchemyBase, SerializerMixin):
     created_date = sqlalchemy.Column(sqlalchemy.DateTime,
                                      default=datetime.datetime.now)
     is_private = sqlalchemy.Column(sqlalchemy.Boolean, default=True)
-    user_id = sqlalchemy.Column(sqlalchemy.Integer,
-                                sqlalchemy.ForeignKey("companies.id"))
+    company_id = sqlalchemy.Column(sqlalchemy.Integer,
+                                   sqlalchemy.ForeignKey("companies.id"))
     company = orm.relation('Company')
 
     def __repr__(self):

@@ -7,19 +7,19 @@ from data.db_session import SqlAlchemyBase
 
 class StudentProject(SqlAlchemyBase, SerializerMixin):
     """Модель записи пользователя"""
-    __tablename__ = 'projects'  # название таблицы
+    __tablename__ = 'student_projects'
 
     id = sqlalchemy.Column(sqlalchemy.Integer,
-                           primary_key=True, autoincrement=True)  # идентификатор
-    title = sqlalchemy.Column(sqlalchemy.String, nullable=True)  # заголовок
-    content = sqlalchemy.Column(sqlalchemy.String, nullable=True)  # содержимое (текст)
-    photo_path = sqlalchemy.Column(sqlalchemy.String, nullable=True)  # путь к изображению
+                           primary_key=True, autoincrement=True)
+    title = sqlalchemy.Column(sqlalchemy.String, nullable=True)
+    content = sqlalchemy.Column(sqlalchemy.String, nullable=True)
+    photo_path = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     created_date = sqlalchemy.Column(sqlalchemy.DateTime,
-                                     default=datetime.datetime.now)  # дата создания
-    is_private = sqlalchemy.Column(sqlalchemy.Boolean, default=True)  # личное/публичное
-    user_id = sqlalchemy.Column(sqlalchemy.Integer,
-                                sqlalchemy.ForeignKey("students.id"))  # идентификатор автора записи
-    student = orm.relation('Student')  # связываем с моделью пользователя
+                                     default=datetime.datetime.now)
+    is_private = sqlalchemy.Column(sqlalchemy.Boolean, default=True)
+    student_id = sqlalchemy.Column(sqlalchemy.Integer,
+                                   sqlalchemy.ForeignKey("students.id"))
+    student = orm.relation('Student')
 
     def __repr__(self):
         return f'<StudentProject> {self.title}'

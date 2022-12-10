@@ -13,7 +13,7 @@ class StudentProjectResource(Resource):
         abort_if_news_not_found(news_id)
         session = db_session.create_session()
         news = session.query(StudentProject).get(news_id)
-        return jsonify({'news': news.to_dict(
+        return jsonify({'projects': news.to_dict(
             only=('title', 'content', 'user.name', 'is_private', 'photo_path'))})  # возвращаем json
 
     def post(self, news_id):
@@ -25,7 +25,7 @@ class StudentProjectResource(Resource):
         news.title = args['title']
         news.content = args['content']
         news.is_private = args['is_private']
-        news.user_id = args['user_id']
+        news.company_id = args['company_id']
         session.commit()
         return jsonify({'success': 'OK'})  # возвращаем json {ok}
 
@@ -46,7 +46,7 @@ class NewsListResource(Resource):
         """Получение всех записей"""
         session = db_session.create_session()
         news = session.query(StudentProject).all()
-        return jsonify({'news': [item.to_dict(
+        return jsonify({'projects': [item.to_dict(
             only=('title', 'content', 'user.name', 'photo_path')) for item in
             news]})  # возвращаем json со всеми записями
 
@@ -57,7 +57,7 @@ class NewsListResource(Resource):
         news = StudentProject(
             title=args['title'],
             content=args['content'],
-            user_id=args['user_id'],
+            user_id=args['company_id'],
             is_private=args['is_private']
         )
         session.add(news)
