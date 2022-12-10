@@ -1,3 +1,5 @@
+from phonenumbers import carrier, parse
+from phonenumbers.phonenumberutil import number_type
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileAllowed, FileField
 from wtforms import EmailField, PasswordField, SubmitField, RadioField, DateField
@@ -28,6 +30,7 @@ class StudentRegisterForm(FlaskForm):
     """Форма для 2 шага регистрации (студент)"""
     name = StringField('Имя', validators=[DataRequired(), Length(min=2, message='Слишком короткое имя!')])
     surname = StringField('Фамилия', validators=[DataRequired(), Length(min=2, message='Слишком короткая фамилия!')])
+    phone = StringField('Номер телефона', validators=[DataRequired(), Length(min=11, max=12)], default='+7')
     birthday = DateField(validators=[DataRequired()])
     study_place = StringField('Учебное заведение',
                               validators=[DataRequired(),
@@ -39,7 +42,19 @@ class StudentRegisterForm(FlaskForm):
                         default='Бакалавр')
     course = IntegerField('Курс', validators=[DataRequired('Если вы не бакалавр и не магистр, укажите 1.'),
                                               NumberRange(min=1, max=6, message='Укажите число от 1 до 6!')], default=1)
-    photo = FileField('Изображение', validators=[FileAllowed(['png', 'jpg', 'jpeg'], 'Только png и jpg!')])
+    photo = FileField('Фото', validators=[FileAllowed(['png', 'jpg', 'jpeg'], 'Только png и jpg!')])
+    submit = SubmitField('ДАЛЕЕ')
+
+    def validate_phone(self, phone):
+        if not carrier._is_mobile(number_type(parse(phone))):
+            raise ValidationError('Number is not correct!')
+
+
+class CompanyRegisterForm(FlaskForm):
+    """Форма для 2 шага регистрации (студент)"""
+    name = StringField('Имя', validators=[DataRequired(), Length(min=2, message='Слишком короткое имя!')])
+    phone = StringField('Номер телефона', validators=[DataRequired(), Length(min=11, max=12)], default='+7')
+    photo = FileField('Фото', validators=[FileAllowed(['png', 'jpg', 'jpeg'], 'Только png и jpg!')])
     submit = SubmitField('ДАЛЕЕ')
 
 

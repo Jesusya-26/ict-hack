@@ -24,6 +24,15 @@
         {% endfor %}
     </p>
     <p>
+        {{ form.phone.label }}<br>
+        {{ form.phone(class="form-control") }}<br>
+        {% for error in form.phone.errors %}
+            <p class="alert alert-danger" role="alert">
+                {{ error }}
+            </p>
+        {% endfor %}
+    </p>
+    <p>
         {{ form.birthday.label }}<br>
         {{ form.birthday(class="form-control", type="date")}}<br>
         {% for error in form.birthday.errors %}

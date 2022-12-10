@@ -138,6 +138,37 @@ def student_register(username):
         if form.validate_on_submit():
             student.name = form.name.data.strip()
             student.surname = form.surname.data.strip()
+            student.phone = form.phone.data.strip()
+            student.birthday = form.birthday.data
+            student.study_place = form.study_place.data.strip()
+            student.program = form.program.data.strip()
+            student.grade = form.grade.data
+            student.course = form.course.data
+            file = form.photo.data
+            if file:
+                filename = secure_filename(file.filename)
+                os.chdir('static/' + app.config['STUDENT_PHOTO_FOLDER'])
+                if not os.path.isdir(student.username):
+                    os.mkdir(student.username)
+                student.photo_path = url_for(
+                    'static', filename=app.config['STUDENT_PHOTO_FOLDER'] + f'{student.username}/{filename}')
+                file.save(f'{student.username}/{filename}')
+            db_sess.commit()
+            return redirect('/login')
+    else:
+        abort(404)
+    return render_template('student_register.html', title='Регистрация', form=form)
+
+
+@app.route('/student_register/<username>', methods=['GET', 'POST'])
+def company_register(username):
+    form = StudentRegisterForm()
+    db_sess = db_session.create_session()
+    student = db_sess.query(Student).filter(Student.username == username).first()
+    if student:
+        if form.validate_on_submit():
+            student.name = form.name.data.strip()
+            student.surname = form.surname.data.strip()
             student.birthday = form.birthday.data
             student.study_place = form.study_place.data.strip()
             student.program = form.program.data.strip()
